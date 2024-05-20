@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>On-Site Report Dashboard</title>
+    <link rel="stylesheet" type="text/css" href="/static/css/styles.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            function fetchData() {
+                console.log("Fetching data...");  // Debugging line
+                $.ajax({
+                    url: '/data',
+                    type: 'GET',
+                    dataType: 'json',
+                    success: function(data) {
+                        console.log("Received data:", data);  // Debugging line
+                        if (data.length === 0) {
+                            console.log("No data received");
+                        }
+                        $('#musterTable tbody').empty();
+                        data.forEach(function(item) {
+                            console.log("Appending data:", item);  // Debugging line
+                            $('#musterTable tbody').append(
+                                '<tr><td>' + item.name + '</td><td>' + item.status + '</td><td>' + item.time + '</td></tr>'
+                            );
+                        });
+                    },
+                    error: function(jqXHR, textStatus, errorThrown) {
+                        console.error("Error fetching data:", textStatus, errorThrown);  // Debugging line
+                    }
+                });
+            }
+            fetchData();
+            setInterval(fetchData, 5000);  // Update every 5 seconds
+        });
+    </script>
+</head>
+<body>
+    <h1>On-Site Report</h1>
+    <table id="musterTable" border="1">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Status</th>
+                <th>Time</th>
+            </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+</body>
+</html>
+
